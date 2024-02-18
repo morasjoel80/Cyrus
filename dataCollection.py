@@ -15,7 +15,7 @@ SAMPLE_SIZE = 500
 # Variables
 
 counter = 0
-folder = "Data/Hello"
+folder = "Model_Data/Hello"
 
 while True:
     success, img = cap.read()
