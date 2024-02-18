@@ -6,9 +6,13 @@ import numpy as np
 import pyttsx3
 import math
 
+
+MODEL_PATH = "Model/keras_model.h5"
+LABEL_PATH = "Model/labels.txt"
+
 cap = cv2.VideoCapture(0)
-detector = HandDetector(maxHands=1, detectionCon=0.8)
-classifier = Classifier("Model/keras_model.h5", "Model/labels.txt")
+detector = HandDetector(maxHands=1, detectionCon=0.5)
+classifier = Classifier(MODEL_PATH, LABEL_PATH)
 
 # Constants
 
@@ -18,9 +22,9 @@ VOICE = 0   # 0 Male    1 Female
 
 # Variables
 
-folder = open("Model/labels.txt", "r")
-f = folder.read()
-Labels = f.replace('\n', '')
+folder = open(LABEL_PATH, "r")
+f = folder.read().splitlines()
+Labels = f
 folder.close()
 
 # Init text to speech
