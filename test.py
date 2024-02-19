@@ -17,7 +17,7 @@ classifier = Classifier(MODEL_PATH, LABEL_PATH)
 # Constants
 
 OFFSET = 20
-IMG_SIZE = 300
+IMG_SIZE = 600
 VOICE = 0   # 0 Male    One Female
 
 # Variables
