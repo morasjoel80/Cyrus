@@ -58,18 +58,26 @@ while True:
                 hand2 = hands[1]
                 if hand1["type"] == "Right":    #   Checks whether the first hand to be detected is right
                     x, y, w, h = hand1['bbox']
+                    centerpoint1 = hand1["center"]
                     x1, y1, w1, h1 = hand2['bbox']
+                    centerpoint2 = hand2["center"]
                 else:
                     x, y, w, h = hand2['bbox']
+                    centerpoint1 = hand2["center"]
                     x1, y1, w1, h1 = hand1['bbox']
+                    centerpoint2 = hand1["center"]
 
-                imgCrop = img[y - OFFSET: y1 + h1 + (OFFSET + 20), x - OFFSET: x1 + w1 + (OFFSET + 20)]
+                length, info, img = detector.findDistance(centerpoint1, centerpoint2, img)
 
-                aspectRatio = ((h+h1)/2) / ((w+w1)/2)
+                imgCrop = img[y - OFFSET: y1 + h1 + (OFFSET + 50), x - OFFSET: x1 + w1 + (OFFSET + 50)]
+
+                Havg = (h + h1)/2
+                Wavg = (w + w1)/2
+                aspectRatio = Havg / Wavg
 
                 if aspectRatio > 1:
-                    k = IMG_SIZE / h
-                    wCal = math.ceil(k * w)
+                    k = IMG_SIZE / Havg
+                    wCal = math.ceil(k * Wavg)
                     imgResize = cv2.resize(imgCrop, (wCal, IMG_SIZE))
                     imgResizeShape = imgResize.shape
                     wGap = math.ceil((IMG_SIZE - wCal) / 2)
@@ -77,8 +85,8 @@ while True:
                     #   Pastes imgCrop onto imgWhite
 
                 else:
-                    k = IMG_SIZE / w
-                    hCal = math.ceil(k * h)
+                    k = IMG_SIZE / Wavg
+                    hCal = math.ceil(k * Havg)
                     imgResize = cv2.resize(imgCrop, (IMG_SIZE, hCal))
                     imgResizeShape = imgResize.shape
                     hGap = math.ceil((IMG_SIZE - hCal) / 2)
