@@ -7,8 +7,8 @@ import pyttsx3
 import math
 
 
-MODEL_PATH = "Model/keras_model.h5"
-LABEL_PATH = "Model/labels.txt"
+MODEL_PATH = "../Model/Old_Model/keras_model.h5"
+LABEL_PATH = "../Model/Old_Model/labels.txt"
 
 cap = cv2.VideoCapture(0)
 detector = HandDetector(maxHands=1, detectionCon=0.5)
