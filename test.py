@@ -91,7 +91,7 @@ def capture():
                 if text != Labels[index]:
                     text = str(Labels[index])
                     threading.Thread(
-                        target=speech, args=(text,)
+                        target=speech, args=(text,)     # Passing text as tuple to prevent errors
                     ).start()
 
                 # cv2.imshow("ImageCrop", imgCrop)
