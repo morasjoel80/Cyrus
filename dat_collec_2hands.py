@@ -68,11 +68,18 @@ while True:
                     centerpoint2 = hand1["center"]
 
                 length, info, img = detector.findDistance(centerpoint1, centerpoint2, img)
+                print("\n", info)
+                #   for testing
 
-                imgCrop = img[y - OFFSET: y1 + h1 + (OFFSET + 50), x - OFFSET: x1 + w1 + (OFFSET + 50)]
+                if y < y1:
+                    #   Crops with respect to the right hand
+                    imgCrop = img[y - OFFSET : info[3] +h1 + OFFSET, x - OFFSET: info[2] + w1 + (OFFSET + 50)]
+                else:
+                    #   Crops with respect to the left hand
+                    imgCrop = img[y1 - OFFSET : info[1] + h + OFFSET, x - OFFSET: info[2] + w1 + (OFFSET + 50)]
 
-                Havg = (h + h1)/2
-                Wavg = length/2
+                Havg = (info[1]+info[3])+((y+y1))/2
+                Wavg = (info[0]+info[2])+((x+x1))/2
                 aspectRatio = Havg / Wavg
 
                 if aspectRatio > 1:
