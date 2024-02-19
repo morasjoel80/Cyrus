@@ -72,7 +72,7 @@ while True:
                 imgCrop = img[y - OFFSET: y1 + h1 + (OFFSET + 50), x - OFFSET: x1 + w1 + (OFFSET + 50)]
 
                 Havg = (h + h1)/2
-                Wavg = (w + w1)/2
+                Wavg = length/2
                 aspectRatio = Havg / Wavg
 
                 if aspectRatio > 1:
