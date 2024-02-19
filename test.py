@@ -1,4 +1,5 @@
 import cv2
+import timer
 from cvzone.HandTrackingModule import HandDetector
 from cvzone.ClassificationModule import Classifier
 from playsound import playsound
@@ -21,7 +22,7 @@ IMG_SIZE = 600
 VOICE = 0   # 0 Male    One Female
 
 # Variables
-
+wait = False
 folder = open(LABEL_PATH, "r")
 f = folder.read().splitlines()
 Labels = f
@@ -32,18 +33,22 @@ folder.close()
 
 
 def speech(audio):
+    global wait
     print(audio)
-    done = False
-    while not done:
-        try:
-            playsound(f'{SPEECH_PATH}/{audio}.mp3')
-            done = True
-        except:
-            continue
-    time.sleep(1)
+    if not wait:
+        wait = True
+        done = False
+        while not done:
+            try:
+                playsound(f'{SPEECH_PATH}/{audio}.mp3')
+                done = True
+                wait = False
+            except:
+                continue
 
 
 def capture():
+    global wait
     text = ''
     while True:
         try:
@@ -148,7 +153,7 @@ def capture():
                         #   Pastes imgCrop onto imgWhite
 
                     # Text To Speech
-                    if text != Labels[index]:
+                    if text != Labels[index] and not wait:
                         text = str(Labels[index])
                         threading.Thread(
                             target=speech, args=(text,)
