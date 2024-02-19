@@ -1,18 +1,17 @@
 import cv2
 from cvzone.HandTrackingModule import HandDetector
 from cvzone.ClassificationModule import Classifier
-from playsound import playsound
 import threading
 import numpy as np
+import pyttsx3
 import math
-import time
+
 
 MODEL_PATH = "Model/keras_model.h5"
 LABEL_PATH = "Model/labels.txt"
-SPEECH_PATH = "Speech"
 
 cap = cv2.VideoCapture(0)
-detector = HandDetector(maxHands=1, detectionCon=0.8)
+detector = HandDetector(maxHands=1, detectionCon=0.5)
 classifier = Classifier(MODEL_PATH, LABEL_PATH)
 
 # Constants
@@ -26,22 +25,20 @@ VOICE = 0   # 0 Male    1 Female
 folder = open(LABEL_PATH, "r")
 f = folder.read().splitlines()
 Labels = f
-print(Labels)
 folder.close()
 
 # Init text to speech
 
 
-def speech(audio):
-    print(audio)
-    done = False
-    while not done:
-        try:
-            playsound(f'{SPEECH_PATH}/{audio}.mp3')
-            done = True
-        except:
-            continue
-    time.sleep(1)
+def speech(text):
+    try:
+        engine = pyttsx3.init()
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[VOICE].id)
+        engine.say(text)
+        engine.runAndWait()
+    except RuntimeError:
+        print("\nSpeech error (Multiple inputs)")
 
 
 def capture():
@@ -89,17 +86,17 @@ def capture():
         # Text To Speech
 
                 if text != Labels[index]:
-                    text = str(Labels[index])
+                    text = Labels[index]
                     threading.Thread(
-                        target=speech, args=(text,)
+                        target=speech, args=text, daemon=True
                     ).start()
 
                 # cv2.imshow("ImageCrop", imgCrop)
-                cv2.imshow("ImageWhite", imgWhite)
+                # cv2.imshow("ImageWhite", imgWhite)
             cv2.imshow("Image", imgOutput)
             cv2.waitKey(1)
         except cv2.error:
-            print("\nOut of bounds")
+            print("\nCannot Detect (Out of Bounds)")
 
 
 if __name__ == "__main__":
